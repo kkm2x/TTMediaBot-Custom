@@ -244,10 +244,16 @@ create_bot() {
     read -p "Option (1/2): " cookies_opt
     
     if [ "$cookies_opt" == "1" ]; then
-        echo "Please paste your cookies content below. When finished, press Enter, then Ctrl+D (on a new line):"
-        cookies_content=$(cat)
+        echo "Please paste your cookies content below."
+        echo "When finished, type 'END' on a new line and press Enter:"
         cookies_path="/tmp/temp_cookies.txt"
-        echo "$cookies_content" > "$cookies_path"
+        > "$cookies_path"
+        while IFS= read -r line; do
+            if [[ "$line" == "END" ]]; then
+                break
+            fi
+            echo "$line" >> "$cookies_path"
+        done
     else
         read -p "Full path to cookies file (Ex: /root/cookies.txt): " cookies_path
     fi
@@ -1168,10 +1174,16 @@ update_all_cookies() {
     read -p "Option (1/2): " cookies_opt
     
     if [ "$cookies_opt" == "1" ]; then
-        echo "Please paste your cookies content below. When finished, press Enter, then Ctrl+D (on a new line):"
-        cookies_content=$(cat)
+        echo "Please paste your cookies content below."
+        echo "When finished, type 'END' on a new line and press Enter:"
         new_cookies_path="/tmp/temp_cookies.txt"
-        echo "$cookies_content" > "$new_cookies_path"
+        > "$new_cookies_path"
+        while IFS= read -r line; do
+            if [[ "$line" == "END" ]]; then
+                break
+            fi
+            echo "$line" >> "$new_cookies_path"
+        done
     else
         read -p "Path to NEW cookies file (Ex: /root/cookies.txt): " new_cookies_path
         if [ ! -f "$new_cookies_path" ]; then
