@@ -27,8 +27,8 @@ else
 fi
 
 # Clone the repository
-REPO_URL="https://github.com/JoaoDEVWHADS/TTMediaBot"
-DIR_NAME="TTMediaBot"
+REPO_URL="https://github.com/kkm2x/TTMediaBot-Custom"
+DIR_NAME="TTMediaBot-Custom"
 
 if [ -d "$DIR_NAME" ]; then
     echo "Directory '$DIR_NAME' already exists. Skipping clone."
