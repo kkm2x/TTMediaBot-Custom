@@ -32,7 +32,7 @@ header() {
 # وظيفة: تثبيت التبعيات
 install_dependencies() {
     header
-    echo -e "${YELLOW}جاري التحقق من التبعيات...${NC}"
+    echo -e "${YELLOW}جاري التحقق من التبعيات (Docker, jq)...${NC}"
 
     if ! command -v docker &> /dev/null; then
         echo "Docker غير موجود. جاري التثبيت من المستودع الرسمي..."
@@ -64,10 +64,10 @@ install_dependencies() {
     fi
 
     if ! command -v jq &> /dev/null; then
-        echo "jq غير موجود. جاري التثبيت..."
+        echo "أداة jq غير موجودة. جاري التثبيت..."
         apt-get install -y jq
     else
-        echo -e "${GREEN}jq مثبت بالفعل.${NC}"
+        echo -e "${GREEN}أداة jq مثبتة بالفعل.${NC}"
     fi
     sleep 1
 }
@@ -117,7 +117,7 @@ build_image() {
     fi
 
     if [[ "$(docker images -q ${BOT_IMAGE} 2> /dev/null)" == "" ]]; then
-        echo "الصورة غير موجودة. جاري بناء الصورة..."
+        echo "الصورة غير موجودة. جاري بناء الصورة (قد يستغرق ذلك بضع دقائق)..."
         docker build --build-arg CACHEBUST=$(date +%s) -t ${BOT_IMAGE} .
         if [ $? -eq 0 ]; then
              echo -e "${GREEN}تم بناء الصورة بنجاح!${NC}"
@@ -138,7 +138,7 @@ create_bot() {
     echo -e "${YELLOW} --- إنشاء بوت جديد --- ${NC}"
     
     if [ ! -f "$CONFIG_SOURCE" ]; then
-       echo -e "${RED}خطأ: الملف '$CONFIG_SOURCE' غير موجود.${NC}"
+       echo -e "${RED}خطأ: الملف المصدري للإعدادات '$CONFIG_SOURCE' غير موجود.${NC}"
        return
     fi
     
@@ -166,20 +166,20 @@ create_bot() {
     udp_port=${udp_port:-10333}
     
     echo "هل الاتصال مشفر؟"
-    echo "1. لا (False)"
-    echo "2. نعم (True)"
+    echo "1. لا (غير مشفر)"
+    echo "2. نعم (مشفر)"
     read -p "الخيار: " encrypted_opt
     if [ "$encrypted_opt" == "2" ]; then encrypted="true"; else encrypted="false"; fi
     
     read -p "اسم المستخدم: " username
     read -sp "كلمة المرور: " password
     echo ""
-    read -p "لقب البوت (الافتراضي: TTMediaBot): " nickname
+    read -p "لقب البوت (الاسم الذي سيظهر في السيرفر): " nickname
     nickname=${nickname:-TTMediaBot}
     
-    echo "--- إعداد الكوكيز ---"
-    echo "1. لصق محتوى الكوكيز مباشرة (موصى به)"
-    echo "2. تقديم مسار لملف cookies.txt"
+    echo "--- إعداد الكوكيز (Cookies) ---"
+    echo "1. لصق محتوى الكوكيز مباشرة (تلقائي)"
+    echo "2. تقديم مسار لملف cookies.txt موجود"
     read -p "الخيار (1/2): " cookies_opt
     
     if [ "$cookies_opt" == "1" ]; then
@@ -194,12 +194,12 @@ create_bot() {
         read -p "المسار الكامل لملف الكوكيز (مثال: /root/cookies.txt): " cookies_path
     fi
     
-    read -p "القناة (الافتراضي: /): " channel
+    read -p "القناة المراد دخولها (الافتراضي: /): " channel
     channel=${channel:-/}
-    read -sp "كلمة مرور القناة (الافتراضي: فارغ): " channel_password
+    read -sp "كلمة مرور القناة (اتركه فارغاً إذا لم يوجد): " channel_password
     echo ""
 
-    echo -e "${YELLOW}جاري إنشاء البوت...${NC}"
+    echo -e "${YELLOW}جاري إنشاء البوت وإعداد الملفات...${NC}"
     mkdir -p "$BOT_DIR"
     cp "$CONFIG_SOURCE" "$BOT_DIR/config.json"
     
@@ -235,19 +235,19 @@ create_bot() {
 
     docker start "$bot_name"
     echo -e "${GREEN}تم إنشاء البوت وتشغيله بنجاح!${NC}"
-    read -p "اضغط Enter للعودة..."
+    read -p "اضغط Enter للعودة للقائمة..."
 }
 
 # وظيفة: إدارة البوتات
 manage_bots() {
     header
     while true; do
-        echo -e "${YELLOW} --- إدارة البوتات --- ${NC}"
-        echo "1. تشغيل الكل"
-        echo "2. إعادة تشغيل الكل"
-        echo "3. إيقاف الكل"
-        echo "4. حذف بوت"
-        echo "5. تحديث الكوكيز (للجميع)"
+        echo -e "${YELLOW} --- إدارة البوتات الحالية --- ${NC}"
+        echo "1. تشغيل جميع البوتات"
+        echo "2. إعادة تشغيل جميع البوتات"
+        echo "3. إيقاف جميع البوتات"
+        echo "4. حذف بوت معين"
+        echo "5. تحديث الكوكيز (لجميع البوتات دفعة واحدة)"
         echo "6. العودة للقائمة الرئيسية"
         echo ""
         read -p "اختر خياراً: " opt_manage
@@ -269,7 +269,7 @@ manage_bots() {
             4)
                 read -p "اسم البوت المراد حذفه: " del_name
                 docker rm -f "$del_name" && rm -rf "${BOTS_ROOT}/${del_name}"
-                echo "تم الحذف."
+                echo "تم حذف البوت وملفاته."
                 sleep 1; header ;;
             5)
                 echo "يرجى لصق محتوى الكوكيز الجديد أدناه."
@@ -285,7 +285,7 @@ manage_bots() {
                 done
                 docker stop -t 1 $(docker ps -a -q -f "label=role=ttmediabot")
                 docker start $(docker ps -a -q -f "label=role=ttmediabot")
-                echo "تم تحديث الكوكيز وإعادة تشغيل البوتات."
+                echo "تم تحديث الكوكيز وإعادة تشغيل جميع البوتات."
                 sleep 1; header ;;
             6) return ;;
         esac
@@ -300,9 +300,9 @@ mkdir -p "$BOTS_ROOT"
 header
 while true; do
     echo "1. إنشاء بوت جديد"
-    echo "2. إدارة البوتات"
-    echo "3. تحديث الكود / إعادة بناء الصورة"
-    echo "4. حذف كل شيء (تنظيف شامل)"
+    echo "2. إدارة البوتات الحالية"
+    echo "3. تحديث الكود / إعادة بناء صورة Docker"
+    echo "4. حذف كل شيء (تنظيف شامل للنظام)"
     echo "5. خروج"
     echo ""
     read -p "اختر خياراً: " option
@@ -311,18 +311,20 @@ while true; do
         1) create_bot; header ;;
         2) manage_bots; header ;;
         3) 
+            echo "جاري تحديث الكود وبناء الصورة..."
             docker build --build-arg CACHEBUST=$(date +%s) -t ${BOT_IMAGE} .
             recreate_bot_containers
-            read -p "تم التحديث. اضغط Enter..."
+            read -p "تم التحديث بنجاح. اضغط Enter..."
             header ;;
         4)
-            read -p "هل أنت متأكد من حذف كل شيء؟ (yes/no): " confirm
+            echo -e "${RED}تحذير: هذا الخيار سيحذف جميع البوتات والملفات والصور!${NC}"
+            read -p "هل أنت متأكد؟ اكتب (yes) للتأكيد: " confirm
             if [ "$confirm" == "yes" ]; then
-                docker stop $(docker ps -a -q -f "label=role=ttmediabot")
-                docker rm $(docker ps -a -q -f "label=role=ttmediabot")
-                docker rmi ${BOT_IMAGE}
+                docker stop $(docker ps -a -q -f "label=role=ttmediabot") 2>/dev/null
+                docker rm $(docker ps -a -q -f "label=role=ttmediabot") 2>/dev/null
+                docker rmi ${BOT_IMAGE} 2>/dev/null
                 rm -rf "$BOTS_ROOT"
-                echo "تم التنظيف الشامل."
+                echo "تم تنظيف النظام بالكامل."
             fi
             header ;;
         5) exit 0 ;;
