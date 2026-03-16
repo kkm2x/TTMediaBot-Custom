@@ -169,19 +169,11 @@ class CommandProcessor:
 
     def parse_command(self, text: str) -> Tuple[str, str]:
         text = text.strip()
-        if not text.lower().startswith("kkm313"):
-            raise errors.ParseCommandError()
-        
-        # Remove the prefix kkm313
-        text_without_prefix = text[6:].strip()
-        if not text_without_prefix:
-            raise errors.ParseCommandError()
-            
         try:
-            command = re.findall(re_command, text_without_prefix.split(" ")[0].lower())[0]
+            command = re.findall(re_command, text.split(" ")[0].lower())[0]
         except IndexError:
             raise errors.ParseCommandError()
-        arg = " ".join(text_without_prefix.split(" ")[1::])
+        arg = " ".join(text.split(" ")[1::])
         return command, arg
 
     def split_arg(self, arg: str) -> List[str]:
