@@ -245,13 +245,10 @@ create_bot() {
     
     if [ "$cookies_opt" == "1" ]; then
         echo "Please paste your cookies content below."
-        echo "When finished, type 'END' on a new line and press Enter:"
+        echo "The script will save automatically 1 second after you finish pasting and press Enter."
         cookies_path="/tmp/temp_cookies.txt"
         > "$cookies_path"
-        while IFS= read -r line; do
-            if [[ "$line" == "END" ]]; then
-                break
-            fi
+        while IFS= read -t 1 -r line; do
             echo "$line" >> "$cookies_path"
         done
     else
@@ -1175,13 +1172,10 @@ update_all_cookies() {
     
     if [ "$cookies_opt" == "1" ]; then
         echo "Please paste your cookies content below."
-        echo "When finished, type 'END' on a new line and press Enter:"
+        echo "The script will save automatically 1 second after you finish pasting and press Enter."
         new_cookies_path="/tmp/temp_cookies.txt"
         > "$new_cookies_path"
-        while IFS= read -r line; do
-            if [[ "$line" == "END" ]]; then
-                break
-            fi
+        while IFS= read -t 1 -r line; do
             echo "$line" >> "$new_cookies_path"
         done
     else
