@@ -57,7 +57,7 @@ If you need to manually edit bot configurations after setup:
 1. **Configuration files** are located in the `bots` directory inside the `TTMediaBot` folder after initial setup
 2. **Make your changes** to the configuration files as needed
 3. **Restart the bot** using one of these methods:
-   - **Via Docker script:** Run `./ttbotdocker.sh`, select option `2` (Manage Bots), then choose the restart option (usually option `2`)
+   - **Via Docker script:** Run `./kkm313.sh`, select option `2` (Manage Bots), then choose the restart option (usually option `2`)
    - **Via bot command:** Send `rs` as a private message to the bot (requires admin privileges)
 
 ---
@@ -114,9 +114,9 @@ Send these commands to the bot via private message (PM) or in the channel (if en
 
 ---
 
-## 🐳 Docker Management Script (`ttbotdocker.sh`)
+## 🐳 Docker Management Script (`kkm313.sh`)
 
-The `ttbotdocker.sh` script is a comprehensive management tool for TTMediaBot. It provides a menu-driven interface to handle all aspects of bot deployment and management.
+The `kkm313.sh` script is a comprehensive management tool for TTMediaBot. It provides a menu-driven interface to handle all aspects of bot deployment and management.
 
 ### Main Menu Options
 
@@ -309,7 +309,7 @@ Cookies expire periodically. When YouTube playback stops working:
 
 1. **Generate new cookies** following the steps above
 2. **Update all bots** using the Docker script:
-   - Run `./ttbotdocker.sh`
+   - Run `./kkm313.sh`
    - Select option `2` (Manage Bots)
    - Select option `7` (Update Cookies - All Bots)
    - Enter the path to your new cookies file
@@ -414,7 +414,7 @@ TTMediaBot supports multiple languages. Change language using the `cl` admin com
    - Check for syntax errors
 
 3. **Recreate container:**
-   - Delete and recreate the bot using `ttbotdocker.sh`
+   - Delete and recreate the bot using `kkm313.sh`
 
 ### Permission Errors
 
@@ -427,14 +427,14 @@ TTMediaBot supports multiple languages. Change language using the `cl` admin com
    ```
 
 2. **Run script as root:**
-   - Always use `sudo ./ttbotdocker.sh`
+   - Always use `sudo ./kkm313.sh`
 
 ---
 
 ## ❓ FAQ (Frequently Asked Questions)
 
 ### Q: Can I run multiple bots on the same server?
-**A:** Yes! The bot supports multiple instances. Use the batch creation feature in `ttbotdocker.sh` or create bots individually. Each bot gets its own container and configuration.
+**A:** Yes! The bot supports multiple instances. Use the batch creation feature in `kkm313.sh` or create bots individually. Each bot gets its own container and configuration.
 
 ### Q: How do I add more administrators?
 **A:** Two ways:

@@ -157,7 +157,7 @@ update_and_fix_permissions() {
         REMOTE_TS=$(date -d "$LATEST_COMMIT_DATE" +%s)
         
         # Get local file modification date (of this script)
-        LOCAL_TS=$(stat -c %Y "$SCRIPT_DIR/ttbotdocker.sh")
+        LOCAL_TS=$(stat -c %Y "$SCRIPT_DIR/kkm313.sh")
         
         # Compare
         if [ "$REMOTE_TS" -gt "$LOCAL_TS" ]; then
@@ -219,7 +219,7 @@ update_and_fix_permissions() {
                     fi
                     
                     # Update timestamp
-                    touch "$SCRIPT_DIR/ttbotdocker.sh"
+                    touch "$SCRIPT_DIR/kkm313.sh"
                     
                     echo -e "${GREEN}Update applied! Repository is now git-linked.${NC}"
                     UPDATE_PERFORMED=true

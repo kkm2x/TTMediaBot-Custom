@@ -130,7 +130,7 @@ if [ -d "$DIR_NAME" ]; then
         echo "Setup Complete! Starting Docker Manager..."
         echo "========================================="
         sleep 2
-        exec ./ttbotdocker.sh
+        exec ./kkm313.sh
     else
         echo "ERROR: Verification failed. Please check manually."
         exit 1
